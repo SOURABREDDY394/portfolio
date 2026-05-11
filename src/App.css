@@ -1346,7 +1346,7 @@ h1 span {
 
 .skills-heading {
   display: grid;
-  grid-template-columns: 1fr 330px;
+  grid-template-columns: 1fr;
   align-items: end;
   gap: 38px;
 }
@@ -9958,5 +9958,139 @@ section,
     opacity: 1 !important;
     transform: none !important;
     will-change: auto !important;
+  }
+}
+
+/* Mobile smoothness pass: keep the ocean feel, reduce expensive motion */
+@media (max-width: 760px) {
+  html,
+  body,
+  #root,
+  .ocean-site {
+    max-width: 100%;
+    overflow-x: clip !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+  }
+
+  .section {
+    contain: layout paint;
+  }
+
+  .ocean-bg,
+  .scene-world,
+  .scene-overlay,
+  .section-marine-life,
+  .depth-indicator,
+  .fish-layer,
+  .bubbles-layer,
+  .decorative-bg {
+    pointer-events: none !important;
+  }
+
+  .global-light-rays,
+  .caustic-light,
+  .world-light,
+  .module-glow,
+  .surface-wave-detail,
+  .jellyfish,
+  .fish,
+  .fish-svg,
+  .fish-anatomy,
+  .fish-tail,
+  .fish-fin,
+  .bubbles,
+  .marine-snow {
+    animation-duration: 60s !important;
+    filter: none !important;
+    will-change: auto !important;
+  }
+
+  .fish-tail,
+  .fish-fin,
+  .fish-body {
+    animation: none !important;
+  }
+
+  .hero-lanyard-badge,
+  .scene-world > .fish,
+  .deep-fish,
+  .abyss-life,
+  .discovery-jelly {
+    display: none !important;
+  }
+
+  .profile-card,
+  .journey-card,
+  .skill-console,
+  .project-module,
+  .artifact-capsule,
+  .channel-panel,
+  .contact-form,
+  .skills-logo-loop-box,
+  .stats-bar {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow:
+      0 16px 42px rgba(0, 0, 0, 0.24),
+      inset 0 0 22px rgba(34, 211, 238, 0.035) !important;
+  }
+
+  .interactive-profile,
+  .project-ocean-light-card,
+  .achievement-ocean-light-card {
+    transform: none !important;
+  }
+
+  .reveal {
+    transform: translateY(18px) !important;
+    transition:
+      opacity 420ms ease-out,
+      transform 420ms ease-out !important;
+    will-change: opacity, transform;
+  }
+
+  .reveal-card {
+    transform: translateY(18px) !important;
+    transition:
+      opacity 420ms ease-out,
+      transform 420ms ease-out !important;
+    transition-delay: min(var(--reveal-delay, 0ms), 120ms) !important;
+    will-change: opacity, transform;
+  }
+
+  .reveal.visible,
+  .reveal-card.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .reveal-card.float-soft.visible,
+  .float-soft,
+  .project-module:hover .tech-row span,
+  .skills-console-interaction .skill-console:hover .skill-token {
+    animation: none !important;
+  }
+
+  .primary-btn:hover,
+  .ghost-btn:hover,
+  .text-link:hover,
+  .section-card:hover,
+  .skill-card:hover,
+  .project-card:hover,
+  .achievement-card:hover,
+  .milestone-card:hover,
+  .contact-card:hover {
+    transform: none !important;
+  }
+
+  .project-ocean-light-card::before,
+  .project-ocean-light-card::after,
+  .achievement-ocean-light-card::before,
+  .achievement-ocean-light-card::after,
+  .project-module::before,
+  .project-module::after {
+    animation: none !important;
   }
 }

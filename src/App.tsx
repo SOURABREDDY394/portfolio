@@ -108,33 +108,33 @@ const navItems = [
 
 const journeyItems = [
   {
-    title: 'FSB Degree College',
+    title: 'Osmania University',
     detail: 'Laid the foundation in Computer Applications and discovered my passion for tech.',
-    date: '2019 - 2022',
+    date: '2024 - 2027',
     icon: GraduationCap,
   },
   {
     title: 'AI / ML Enthusiast',
     detail: 'Dove into Artificial Intelligence and Machine Learning with curiosity and focus.',
-    date: '2022 - 2023',
+    date: '2024 - 2025',
     icon: Brain,
   },
   {
     title: 'Hackathon Participant',
     detail: 'Built real-world solutions under pressure and collaborated with ambitious builders.',
-    date: '2023',
+    date: '2025',
     icon: Trophy,
   },
   {
     title: 'Certifications Earned',
     detail: 'Strengthened skills through industry-recognized certifications and hands-on learning.',
-    date: '2023 - 2024',
+    date: '2025 - 2026',
     icon: Award,
   },
   {
     title: 'Continuous Growth',
     detail: 'Always learning, always building, and pushing toward more capable AI products.',
-    date: 'Ongoing',
+    date: '2026 - 2027',
     icon: Rocket,
   },
 ]
@@ -935,7 +935,6 @@ function HeroSection() {
               <GraduationCap size={22} />
               <span>BCA</span>
             </div>
-            <div className="profile-footer">Building the future with AI</div>
           </div>
         </motion.div>
 
@@ -1012,7 +1011,7 @@ function JourneySection() {
       </div>
 
       <div className="stats-bar bottom-stats">
-        <Stat icon={Sparkles} value="5+" label="Years of learning" revealDelay={0} />
+        <Stat icon={Sparkles} value="2+" label="Years of learning" revealDelay={0} />
         <Stat icon={Code2} value="20+" label="Projects built" revealDelay={100} />
         <Stat icon={Award} value="10+" label="Certifications" revealDelay={200} />
         <Stat icon={Rocket} value="Infinity" label="Possibilities ahead" revealDelay={300} />
@@ -1064,11 +1063,6 @@ function SkillsSection() {
           title="SKILLS"
           subtitle="A fusion of full-stack development and AI engineering built into underwater systems."
         />
-        <div className="system-badge reveal-card float-soft">
-          <Brain size={30} />
-          <span>Built for scale</span>
-          <small>Driven by intelligence</small>
-        </div>
       </div>
 
       <SkillsLogoLoop />
@@ -1124,11 +1118,6 @@ function ProjectsSection() {
             title="PROJECTS"
             subtitle="AI-powered systems built like deep-sea research modules, connected by one descending exploration route."
           />
-          <div className="mission-card reveal-card">
-            <Sparkles size={24} />
-            <p>Each project is a step deeper into innovation, engineered with purpose and driven by intelligence.</p>
-            <span>Building the future with AI</span>
-          </div>
         </div>
 
         <div className="project-stack project-research-interaction">

@@ -18,6 +18,8 @@
           radial-gradient(circle at 50% 5%, rgba(0, 230, 255, 0.2), transparent 28%),
           radial-gradient(circle at 80% 45%, rgba(0, 150, 255, 0.08), transparent 35%),
           linear-gradient(180deg, #073b4c 0%, #052f45 18%, #03243a 36%, #02192c 56%, #010f1f 76%, #000814 100%);
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
       }
 
       a {
@@ -202,13 +204,34 @@
       }
 
       @media (max-width: 720px) {
+        body {
+          background:
+            radial-gradient(circle at 50% 0%, rgba(0, 230, 255, 0.16), transparent 26%),
+            linear-gradient(180deg, #06384a 0%, #03243a 42%, #000814 100%);
+        }
+
         .resume-page {
-          padding: 16px;
+          padding: 14px;
         }
 
         .resume-nav {
           align-items: flex-start;
           flex-direction: column;
+          padding: 14px;
+          border-radius: 18px;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 16px 42px rgba(0, 0, 0, 0.26);
+        }
+
+        .brand {
+          min-width: 0;
+          font-size: 16px;
+        }
+
+        .brand-logo {
+          width: 38px;
+          height: 38px;
+          border-radius: 12px;
         }
 
         .actions,
@@ -216,8 +239,61 @@
           width: 100%;
         }
 
+        .actions {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
         .actions a {
           justify-content: center;
+          min-height: 42px;
+          padding: 0 14px;
+          font-size: 11px;
+        }
+
+        .resume-card {
+          padding: 20px;
+          border-radius: 20px;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
+        }
+
+        h1 {
+          font-size: clamp(30px, 11vw, 42px);
+          line-height: 1;
+          overflow-wrap: anywhere;
+        }
+
+        .contact-line {
+          display: grid;
+          gap: 8px;
+          font-size: 13px;
+          overflow-wrap: anywhere;
+        }
+
+        section {
+          margin-top: 24px;
+        }
+
+        h2 {
+          font-size: 13px;
+          letter-spacing: 0.16em;
+        }
+
+        h3 {
+          font-size: 16px;
+          line-height: 1.28;
+        }
+
+        p,
+        li,
+        .skill-row {
+          font-size: 14px;
+          line-height: 1.58;
+        }
+
+        ul {
+          padding-left: 19px;
         }
       }
     </style>
@@ -252,7 +328,7 @@
             <h2>Education</h2>
             <div class="section-line"></div>
             <div class="item">
-              <h3>FSB Degree College <span class="muted">- Hyderabad, India</span></h3>
+              <h3>Osmania University <span class="muted">- Hyderabad, India</span></h3>
               <p>Bachelor of Computer Applications (BCA) | CGPA: 8.5/10 | 2024 - 2027</p>
             </div>
           </section>
