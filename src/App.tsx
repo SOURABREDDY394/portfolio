@@ -526,6 +526,54 @@ function useRoutePath() {
   return path
 }
 
+function useMobileScrollReveal(refreshKey: string) {
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const compactViewport = window.matchMedia('(max-width: 760px)')
+    let observer: IntersectionObserver | null = null
+
+    const reveal = () => {
+      observer?.disconnect()
+
+      const revealItems = Array.from(document.querySelectorAll<HTMLElement>('.reveal, .reveal-card'))
+
+      if (!compactViewport.matches || reduceMotion.matches || !('IntersectionObserver' in window)) {
+        revealItems.forEach((item) => item.classList.add('visible'))
+        return
+      }
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return
+            entry.target.classList.add('visible')
+            observer?.unobserve(entry.target)
+          })
+        },
+        {
+          threshold: 0.15,
+          rootMargin: '0px 0px -60px 0px',
+        },
+      )
+
+      revealItems.forEach((item) => {
+        item.classList.remove('visible')
+        observer?.observe(item)
+      })
+    }
+
+    reveal()
+    compactViewport.addEventListener('change', reveal)
+    reduceMotion.addEventListener('change', reveal)
+
+    return () => {
+      observer?.disconnect()
+      compactViewport.removeEventListener('change', reveal)
+      reduceMotion.removeEventListener('change', reveal)
+    }
+  }, [refreshKey])
+}
+
 function OceanBackground() {
   return (
     <div className="ocean-bg" aria-hidden="true">
@@ -706,7 +754,7 @@ function SceneFrame({
   children: React.ReactNode
 }) {
   return (
-    <section id={id} className={`section scene-${zone}`}>
+    <section id={id} className={`section scene-${zone} reveal`}>
       <div className="scene-overlay" />
       <div className="scene-world" aria-hidden="true">
         <span className="world-light world-light-a" />
@@ -799,7 +847,7 @@ function SectionIntro({
 }) {
   return (
     <motion.div
-      className={`section-intro ${align === 'center' ? 'centered' : ''}`}
+      className={`section-intro reveal-card ${align === 'center' ? 'centered' : ''}`}
       initial={{ opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-120px' }}
@@ -848,9 +896,9 @@ function HeroSection() {
             </a>
           </div>
           <div className="stats-bar hero-stats">
-            <Stat icon={Code2} value="24+" label="Technologies mastered" />
-            <Stat icon={Sparkles} value="3+" label="AI projects built" />
-            <Stat icon={ShieldCheck} value="4+" label="Certifications earned" />
+            <Stat icon={Code2} value="24+" label="Technologies mastered" revealDelay={0} />
+            <Stat icon={Sparkles} value="3+" label="AI projects built" revealDelay={100} />
+            <Stat icon={ShieldCheck} value="4+" label="Certifications earned" revealDelay={200} />
           </div>
         </motion.div>
 
@@ -903,9 +951,19 @@ function HeroSection() {
   )
 }
 
-function Stat({ icon: Icon, value, label }: { icon: LucideIcon; value: string; label: string }) {
+function Stat({
+  icon: Icon,
+  value,
+  label,
+  revealDelay,
+}: {
+  icon: LucideIcon
+  value: string
+  label: string
+  revealDelay?: number
+}) {
   return (
-    <div className="stat">
+    <div className="stat reveal-card" style={{ '--reveal-delay': `${revealDelay ?? 0}ms` } as React.CSSProperties}>
       <Icon size={24} />
       <strong>{value}</strong>
       <span>{label}</span>
@@ -930,12 +988,13 @@ function JourneySection() {
           const Icon = item.icon
           return (
             <motion.article
-              className="journey-node"
+              className="journey-node reveal-card"
               key={item.title}
               initial={{ opacity: 0, y: 42 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.65, delay: index * 0.08 }}
+              style={{ '--reveal-delay': `${index * 100}ms` } as React.CSSProperties}
             >
               <div className="node-beacon">0{index + 1}</div>
               <div className="glass-card journey-card">
@@ -953,10 +1012,10 @@ function JourneySection() {
       </div>
 
       <div className="stats-bar bottom-stats">
-        <Stat icon={Sparkles} value="5+" label="Years of learning" />
-        <Stat icon={Code2} value="20+" label="Projects built" />
-        <Stat icon={Award} value="10+" label="Certifications" />
-        <Stat icon={Rocket} value="Infinity" label="Possibilities ahead" />
+        <Stat icon={Sparkles} value="5+" label="Years of learning" revealDelay={0} />
+        <Stat icon={Code2} value="20+" label="Projects built" revealDelay={100} />
+        <Stat icon={Award} value="10+" label="Certifications" revealDelay={200} />
+        <Stat icon={Rocket} value="Infinity" label="Possibilities ahead" revealDelay={300} />
       </div>
     </SceneFrame>
   )
@@ -967,7 +1026,7 @@ function SkillsLogoLoop() {
 
   return (
     <motion.div
-      className="skills-logo-loop"
+      className="skills-logo-loop reveal-card"
       initial={{ opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-90px' }}
@@ -1005,7 +1064,7 @@ function SkillsSection() {
           title="SKILLS"
           subtitle="A fusion of full-stack development and AI engineering built into underwater systems."
         />
-        <div className="system-badge">
+        <div className="system-badge reveal-card float-soft">
           <Brain size={30} />
           <span>Built for scale</span>
           <small>Driven by intelligence</small>
@@ -1019,12 +1078,13 @@ function SkillsSection() {
           const GroupIcon = group.icon
           return (
             <motion.article
-              className="skill-console"
+              className="skill-console reveal-card float-soft"
               key={group.title}
               initial={{ opacity: 0, y: 44 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
+              style={{ '--reveal-delay': `${index * 100}ms` } as React.CSSProperties}
             >
               <div className="console-top" />
               <div className="console-icon">
@@ -1064,7 +1124,7 @@ function ProjectsSection() {
             title="PROJECTS"
             subtitle="AI-powered systems built like deep-sea research modules, connected by one descending exploration route."
           />
-          <div className="mission-card">
+          <div className="mission-card reveal-card">
             <Sparkles size={24} />
             <p>Each project is a step deeper into innovation, engineered with purpose and driven by intelligence.</p>
             <span>Building the future with AI</span>
@@ -1076,7 +1136,7 @@ function ProjectsSection() {
             const Icon = project.icon
             return (
               <motion.article
-                className={`project-module project-ocean-light-card module-${index + 1}`}
+                className={`project-module project-ocean-light-card reveal-card float-soft module-${index + 1}`}
                 key={project.title}
                 onPointerMove={handleOceanLightMove}
                 onPointerLeave={handleOceanLightLeave}
@@ -1085,6 +1145,7 @@ function ProjectsSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.75, delay: index * 0.1 }}
+                style={{ '--reveal-delay': `${index * 100}ms` } as React.CSSProperties}
               >
                 <span className="module-node">0{index + 1}</span>
                 <div className="module-icon">
@@ -1191,10 +1252,11 @@ function AchievementsSection() {
               style={{ '--lift': `${index % 2 === 0 ? 0 : 36}px` } as React.CSSProperties}
             >
               <div
-                className="artifact-capsule achievement-ocean-light-card"
+                className="artifact-capsule achievement-ocean-light-card reveal-card float-soft"
                 onPointerMove={handleOceanLightMove}
                 onPointerLeave={handleOceanLightLeave}
                 onPointerDown={handleOceanLightClick}
+                style={{ '--reveal-delay': `${index * 100}ms` } as React.CSSProperties}
               >
                 <Icon size={48} />
                 <h3>{achievement.title}</h3>
@@ -1501,12 +1563,19 @@ function ContactSection() {
             subtitle="Final depth. Real connection. Have a project in mind, want to collaborate, or just want to say hello?"
           />
 
-          <div className="channel-panel">
+          <div className="channel-panel reveal-card">
             <h3>Communication Channels</h3>
-            {contactLinks.map((link) => {
+            {contactLinks.map((link, index) => {
               const Icon = link.icon
               return (
-                <a href={link.href} key={link.label} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+                <a
+                  className="reveal-card"
+                  href={link.href}
+                  key={link.label}
+                  target={link.href.startsWith('http') ? '_blank' : undefined}
+                  rel="noreferrer"
+                  style={{ '--reveal-delay': `${index * 100}ms` } as React.CSSProperties}
+                >
                   <Icon size={24} />
                   <span>
                     <strong>{link.label}</strong>
@@ -1521,12 +1590,13 @@ function ContactSection() {
         </div>
 
         <motion.form
-          className="contact-form"
+          className="contact-form reveal-card float-soft"
           onSubmit={handleSubmit}
           initial={{ opacity: 0, x: 42 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.75 }}
+          style={{ '--reveal-delay': '300ms' } as React.CSSProperties}
         >
           <div className="form-icon">
             <Mail size={24} />
@@ -1645,6 +1715,7 @@ function FooterSection() {
 export default function App() {
   const { depth, activeSection } = useDepthProgress()
   const routePath = useRoutePath()
+  useMobileScrollReveal(routePath)
 
   useEffect(() => {
     let lastHash = ''
